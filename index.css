@@ -1,0 +1,204 @@
+/* From Uiverse.io by satyamchaudharydev */
+/* this card is inspired form this - https://georgefrancis.dev/ */
+
+.card {
+    --border-radius: 0.75rem;
+    --primary-color: #3B82F6;
+    --secondary-color: #3c3852;
+    width: 25%;
+    font-family: "Arial";
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    background: #f1f1f3;
+    box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 3%);
+    position: relative;
+}
+
+.card>*+* {
+    margin-top: 1.1em;
+}
+
+.card .card__content {
+    color: var(--secondary-color);
+    font-size: 0.86rem;
+}
+
+.card .card__title {
+    padding: 0;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.card .card__date {
+    color: #6e6b80;
+    font-size: 0.8rem;
+}
+
+.card .card__domain {
+    color: #000000;
+    font-size: 1rem;
+}
+
+.card .card__arrow {
+    position: absolute;
+    background: var(--primary-color);
+    padding: 0.9rem;
+    border-top-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    bottom: 0;
+    right: 0;
+    transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.card svg {
+    transition: 0.2s;
+}
+
+/* hover */
+.card:hover .card__title {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.card:hover .card__arrow {
+    background: #111;
+}
+
+.card:hover .card__arrow svg {
+    transform: translateX(3px);
+}
+
+/* download button  */
+.button {
+    position: relative;
+    width: 150px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    border-radius: 5px;
+    align-items: center;
+    border: 1px solid #17795E;
+    background-color: #209978;
+    overflow: hidden;
+}
+
+.button,
+.button__icon,
+.button__text {
+    transition: all 0.3s;
+}
+
+.button .button__text {
+    transform: translateX(22px);
+    color: #fff;
+    font-weight: 600;
+}
+
+.button .button__icon {
+    position: absolute;
+    transform: translateX(109px);
+    height: 100%;
+    width: 39px;
+    background-color: #17795E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button .svg {
+    width: 20px;
+    fill: #fff;
+}
+
+.button:hover {
+    background: #17795E;
+}
+
+.button:hover .button__text {
+    color: transparent;
+}
+
+.button:hover .button__icon {
+    width: 148px;
+    transform: translateX(0);
+}
+
+.button:active .button__icon {
+    background-color: #146c54;
+}
+
+.button:active {
+    border: 1px solid #146c54;
+}
+
+/* like */
+
+/* From Uiverse.io by vinodjangid07 */
+.Btn {
+    width: 140px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: none;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.089);
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.leftContainer {
+    width: 60%;
+    height: 100%;
+    background-color: rgb(238, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.leftContainer .like {
+    color: white;
+    font-weight: 600;
+}
+
+.likeCount {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(238, 0, 0);
+    font-weight: 600;
+    position: relative;
+    background-color: white;
+}
+
+.likeCount::before {
+    height: 8px;
+    width: 8px;
+    position: absolute;
+    content: "";
+    background-color: rgb(255, 255, 255);
+    transform: rotate(45deg);
+    left: -4px;
+}
+
+.Btn:hover .leftContainer {
+    background-color: rgb(219, 0, 0);
+}
+
+.Btn:active .leftContainer {
+    background-color: rgb(201, 0, 0);
+}
+
+.Btn:active .leftContainer svg {
+    transform: scale(1.15);
+    transform-origin: top;
+}
