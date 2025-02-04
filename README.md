@@ -8,10 +8,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Future Enhancements](#future-enhancements)
-- [Contributors](#contributors)
-- [License](#license)
-- [Contact](#contact)
-
+- 
 ## Introduction 📖
 JIS RFMO (Research Facilitation & Monitoring Office) is a web-based platform designed to streamline research grant applications and project management for JIS Group faculty members. It provides a centralized system to manage research grants, track project progress, and facilitate communication between researchers and administrators.
 
