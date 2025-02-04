@@ -12,34 +12,45 @@ if (isset($_POST['inputvalue'])) {
 }
 
 try {
-    $stmt1 = $pdo->prepare("SELECT post_id FROM project_allocation WHERE com_status = '1'");
+    $stmt1 = $pdo->prepare("SELECT post_id FROM project_applications WHERE status = '2'");
     $stmt1->execute();
     $numrow12 = $stmt1->rowCount();
-    $data1 = $stmt1->fetch(PDO::FETCH_ASSOC);
 
     if ($numrow12) {
-        // check project_application table status = 1
-        $stmt1 = $pdo->prepare("SELECT * FROM project_applications WHERE post_id = :post_id and status = '2'");
-        // $stmt1->bindParam(':faculty_id', $_SESSION['faculty_id'], PDO::PARAM_STR);
-        $stmt1->execute([
-            ':post_id' => $data1['post_id']
-        ]);
-        $data = $stmt1->fetch(PDO::FETCH_ASSOC);
-        $numrow1 = $stmt1->rowCount();
+        $dataList = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+        // print_r($dataList);
 
-        if ($numrow1) {
-            
-            $stmt = $pdo->prepare("SELECT * FROM posts WHERE post_id =:post_id and status = '1' $srch");
-            $stmt->execute([
+        foreach ($dataList as $data1) {
+
+            // print_r($data1['post_id']);
+            // check project_application table status = 1
+            $stmt3 = $pdo->prepare("SELECT * FROM project_allocation WHERE post_id = :post_id and com_status = '1'");
+            // $stmt1->bindParam(':faculty_id', $_SESSION['faculty_id'], PDO::PARAM_STR);
+            $stmt3->execute([
                 ':post_id' => $data1['post_id']
             ]);
-            $numrow = $stmt->rowCount();
-            $status = 'Completed';
+            $numrow1 = $stmt3->rowCount();
 
-            // var_dump($posts);
+            if ($numrow1) {
 
-            if ($numrow > 0) {
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $stmt = $pdo->prepare("SELECT * FROM posts WHERE post_id =:post_id $srch");
+                $stmt->execute([
+                    ':post_id' => $data1['post_id']
+                ]);
+                $numrow = $stmt->rowCount();
+                $status = 'Completed';
+
+                // var_dump($posts);
+
+                if ($numrow > 0) {
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    $stmt5 = $pdo->prepare("SELECT * FROM project_applications WHERE post_id =:post_id");
+                    $stmt5->execute([
+                        ':post_id' => $data1['post_id']
+                    ]);
+
+                    $data = $stmt5->fetch(PDO::FETCH_ASSOC);
                     //echo '<pre>';
                     //print_r($row); 
                     $output .= '
@@ -72,7 +83,7 @@ try {
                                     <td class="px-4 py-3 ">
     
                                        <!-- Modal toggle -->
-                                    <a type="button" href="complete_progress_reports.php?post_id='.$data['post_id'].'&faculty_id='.$data['faculty_id'].'"
+                                    <a type="button" href="complete_progress_reports.php?post_id=' . $data['post_id'] . '&faculty_id=' . $data['faculty_id'] . '"
                                     class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  :bg-red-600 :hover:bg-red-700 :focus:ring-red-900"
                                     disabled>
                                         View Progress Reports
@@ -84,10 +95,13 @@ try {
                                 
                 
                 ';
+
+                    
                 }
-                echo $output;
+
             }
         }
+        echo $output;
     } else {
         $output .= '<tr><td class="px-4 py-3 ">
     

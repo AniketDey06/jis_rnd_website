@@ -1,24 +1,29 @@
-
 <?php
 require_once '../config/database.php'; // Ensure database connection is included
 
 try {
-    // Check if any project allocation has com_status = 1
-    $stmt1 = $pdo->prepare("SELECT COUNT(*) FROM project_allocation WHERE com_status = '1'");
+    // Count projects in project_application where status = '2'
+    $stmt1 = $pdo->prepare("SELECT post_id FROM project_applications WHERE status = '2'");
     $stmt1->execute();
-    $numrow12 = $stmt1->fetchColumn();
+    $dataList = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
-    if ($numrow12 == 0) { // If no projects have com_status = 1
-        // Count projects in "posts" where status = 1
-        $stmt = $pdo->prepare("SELECT COUNT(*) AS ongoing_count FROM posts WHERE status = '1'");
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $ongoingProjects = 0;
 
-        echo json_encode(['success' => true, 'count' => $result['ongoing_count']]);
-        exit();
+    foreach ($dataList as $data) {
+        $stmt = $pdo->prepare("SELECT * FROM project_allocation WHERE post_id = :post_id AND com_status = '1'");
+        $stmt->execute([':post_id' => $data['post_id']]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC); // Fetch the result properly
+
+        if (!$result) {
+            $ongoingProjects++;
+        }
     }
 
-    echo json_encode(['success' => false, 'message' => 'No ongoing projects found.']);
+    if ($ongoingProjects > 0) {
+        echo json_encode(['success' => true, 'count' => $ongoingProjects]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'No ongoing projects found.']);
+    }
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
 }

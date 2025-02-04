@@ -19,26 +19,27 @@ try {
     $stmt1 = $pdo->prepare("SELECT * FROM project_applications WHERE faculty_id = :faculty_id AND status = '2'");
     $stmt1->bindParam(':faculty_id', $_SESSION['faculty_id'], PDO::PARAM_STR);
     $stmt1->execute();
-    $data = $stmt1->fetch(PDO::FETCH_ASSOC);
     $numrow1 = $stmt1->rowCount();
-
+    
     if ($numrow1) {
+        $datalist = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
-        while ($data = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+        foreach ($datalist as $data1) {
 
             // check project_application table status = 1
             $stmt1 = $pdo->prepare("SELECT * FROM project_allocation WHERE post_id=:post_id and com_status = '1'");
-            $post_id = $data['post_id'];
+            // $post_id = $data1['post_id'];
             // echo $post_id;
             $stmt1->execute([
-                ':post_id' => $post_id
+                ':post_id' => $data1['post_id']
             ]);
             $numrow12 = $stmt1->rowCount();
 
             if (!$numrow12) {
+
                 $stmt = $pdo->prepare("SELECT * FROM posts WHERE post_id = :post_id $srch");
                 $stmt->execute([
-                    ':post_id' => $post_id
+                    ':post_id' => $data1['post_id']
                 ]);
                 $numrow = $stmt->rowCount();
                 $status = 'approved';
@@ -46,7 +47,14 @@ try {
                 // var_dump($posts);
 
                 if ($numrow > 0) {
-                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    $stmt5 = $pdo->prepare("SELECT * FROM project_applications WHERE post_id =:post_id");
+                    $stmt5->execute([
+                        ':post_id' => $data1['post_id']
+                    ]);
+
+                    $data = $stmt5->fetch(PDO::FETCH_ASSOC);
                         //echo '<pre>';
                         //print_r($row); 
                         $output .= '
@@ -95,28 +103,21 @@ try {
                                 
                 
                 ';
-                    }
-                    echo $output;
+                    
+                    
                 } else {
-                    $output .= '<tr><td class="px-4 py-3 ">
+                    $output = '<tr><td class="px-4 py-3 ">
     
                                         no record found
                                         
                                         
                                     </td></tr>';
-                    echo $output;
+                   
 
                 }
-            } else {
-                $output .= '<tr><td class="px-4 py-3 ">
-    
-                                        You are completed
-                                        
-                                        
-                                    </td></tr>';
-                echo $output;
-            }
+            } 
         }
+        echo $output;
     } else {
         $output .= '<tr><td class="px-4 py-3 ">
     
@@ -143,10 +144,6 @@ try {
     echo $e->getMessage();
     die("Failed to fetch data. Please try again later.");
 }
-
-
-
-
 
 
 

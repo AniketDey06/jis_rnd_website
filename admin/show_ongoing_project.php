@@ -16,13 +16,16 @@ try {
     $stmt1 = $pdo->prepare("SELECT * FROM project_applications WHERE status = '2'");
     // $stmt1->bindParam(':faculty_id', $_SESSION['faculty_id'], PDO::PARAM_STR);
     $stmt1->execute();
-    $data = $stmt1->fetch(PDO::FETCH_ASSOC);
+    // $data = $stmt1->fetchAll();
     $numrow1 = $stmt1->rowCount();
 
+    // print_r($data);
     if ($numrow1) {
 
-        while ($data = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+        $dataList = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($dataList as $data) {
 
+            // print_r($data);
             // check project_application table status = 1
             $stmt1 = $pdo->prepare("SELECT * FROM project_allocation WHERE post_id=:post_id and com_status = '1'");
             $post_id = $data['post_id'];
@@ -88,27 +91,19 @@ try {
                                 </tr>
                 ';
                     }
-                    echo $output;
+                   
                 } else {
-                    $output .= '<tr><td class="px-4 py-3 ">
+                    $output = '<tr><td class="px-4 py-3 ">
     
                                         no record found
                                         
                                         
                                     </td></tr>';
-                    echo $output;
-
+                   
                 }
-            } else {
-                $output .= '<tr><td class="px-4 py-3 ">
-    
-                                        You are completed
-                                        
-                                        
-                                    </td></tr>';
-                echo $output;
-            }
+            } 
         }
+        echo $output;
     } else {
         $output .= '<tr><td class="px-4 py-3 ">
     
